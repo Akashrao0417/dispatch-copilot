@@ -41,6 +41,23 @@ Ranked by harm in production — a confident wrong answer is worse than a refusa
 The router fix also fixed sop-02, sop-03 and sop-06. The last one, sop-11 (cited §6 instead of §3), was
 a stemming miss ("choose" vs "choosing") and was fixed too. **After fixes: 30/30.**
 
+## With Claude turned on
+
+The numbers above are **offline** (extractive answers, no model calls), which is why latency is ~0 ms
+and cost is $0. To measure the Claude path (Claude writes each SOP answer from the retrieved sections,
+and any answer without a valid citation is turned into "I don't know"):
+
+1. GitHub → **Settings → Secrets and variables → Actions → New repository secret** → name
+   `ANTHROPIC_API_KEY`.
+2. GitHub → **Actions → Evals with Claude → Run workflow** (default model `claude-sonnet-5-5`).
+3. The run page shows a results table per set (accuracy, citation rate, latency, tokens, cost);
+   the JSON is attached as an artifact.
+
+Cost is reported from real token usage at Sonnet 5.5 list price ($2 / $10 per million input / output
+tokens); a full 40-question run is a few cents. Job questions never call the model (answers come from SQL).
+
+_Claude results: to be added after the first run._
+
 ## Held-out: honest number
 
 On 10 new questions: **90%**. The miss:
@@ -53,5 +70,8 @@ unless the section actually answers the question — then re-run both sets.
 ## Limits
 
 - 30 + 10 questions is a small set; one question is 3 points of accuracy.
+- The 100% is on the same 30 questions the fixes were made against, so it is partly tuned.
+  The held-out set is the fairer number — and its "I don't know" score is **1 of 2 (50%)**:
+  one miss on a tiny sample, but a real miss.
 - Offline latency (~0-3 ms) and $0 cost are for extractive mode. Claude mode adds a model call per SOP answer.
 - Job answers are graded on job IDs only; the "why" text comes straight from tickets.

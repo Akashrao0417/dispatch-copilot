@@ -1,13 +1,16 @@
-pandas>=2.2
-openpyxl>=3.1
-fastapi>=0.110
-uvicorn>=0.29
-httpx>=0.27
-psycopg2-binary>=2.9
-sqlalchemy>=2.0
-streamlit>=1.35
-altair>=5
-pytest>=8
-reportlab>=4
-pypdf>=4
-anthropic>=0.40
+# Pinned to the exact versions the test suite passes with (Python 3.12-3.13).
+# Upgrade deliberately: bump a version, run `pytest`, commit.
+pandas==3.0.5
+numpy==2.5.3
+openpyxl==3.1.5
+fastapi==0.165.0
+uvicorn==0.54.0
+httpx==0.28.1
+psycopg2-binary==2.9.13
+SQLAlchemy==2.1.9
+streamlit==1.67.0
+altair==6.3.0
+reportlab==5.0.1
+pypdf==6.17.0
+anthropic==2.11.0
+pytest==9.1.1

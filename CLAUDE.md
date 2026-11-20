@@ -29,4 +29,7 @@ three messy sources → Postgres → Streamlit. See README.md for the story and 
   and they must cite a retrieved `[SOP-XX §N]` or become "I don't know".
 - App tables (users, proposed_actions, audit_log, customer_messages) live in backend/app_schema.sql and are never
   dropped by the ETL. Reassignments/tickets in jobs/tickets ARE reset by an ETL reload; the audit log keeps them.
+- AUTH_MODE=demo is a passwordless role picker for the public demo; AUTH_MODE=password is real sign-in
+  (PBKDF2 hashes in users.password_hash). Never weaken backend checks because the UI hides something.
+- requirements.txt is pinned; bump versions deliberately and run pytest. CI runs tests + evals on every push.
 - Works without ANTHROPIC_API_KEY (rule planner + extractive answers). Test the LLM path with fake clients.

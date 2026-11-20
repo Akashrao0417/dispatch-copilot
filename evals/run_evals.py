@@ -9,6 +9,7 @@ Data: a deterministic dataset (as of 2026-11-19 14:00) loaded into its own datab
 
 Grading (deliberately strict, and independent of the code under test):
   sop   correct = the expected SOP section is cited AND every required phrase is in the answer
+                (exactly, or all of its words in any order — so a paraphrase from Claude still counts)
   idk   correct = the copilot answers exactly "I don't know"
   jobs  correct = the set of job IDs in the answer equals the gold set, computed here with
                   pandas straight from the tables (not via backend/queries.py)
@@ -70,6 +71,15 @@ def gold_jobs(conn, spec: dict) -> tuple[set[str], str]:
     return set(df.loc[hit, "job_id"]), user
 
 
+WORD = re.compile(r"[a-z0-9%]+")
+
+
+def has_phrase(phrase: str, text: str) -> bool:
+    """Exact phrase, or every word of it present in any order (models paraphrase: 'Gold 2 hours' ~ '2 hours for Gold')."""
+    low = text.lower()
+    return phrase.lower() in low or set(WORD.findall(phrase.lower())) <= set(WORD.findall(low))
+
+
 def grade(item: dict, ans, gold: set[str] | None) -> dict:
     labels = [c.label for c in ans.citations]
     text = ans.text or ""
@@ -78,7 +88,7 @@ def grade(item: dict, ans, gold: set[str] | None) -> dict:
         out["correct"] = ans.kind == "idk"
         out["why"] = "" if out["correct"] else f"answered instead of I don't know: {text[:100]!r}"
     elif item["type"] == "sop":
-        missing = [m for m in item["must"] if m.lower() not in text.lower()]
+        missing = [m for m in item["must"] if not has_phrase(m, text)]
         out["cite_hit"] = item["cite"] in labels
         out["correct"] = out["cite_hit"] and not missing and ans.kind == "sop"
         out["why"] = "" if out["correct"] else (
@@ -138,6 +148,19 @@ def run(label: str, reload: bool = True, questions: str = "questions.json") -> d
     return summary
 
 
+def markdown_summary(s: dict) -> str:
+    a = s["accuracy_by_type"]
+    lines = [f"### {s['label']} · {s['mode']}", "",
+             "| Qs | Accuracy | SOP | I don't know | Jobs | Citation rate | SOP citation hit | p50 / p95 latency | Model calls | Tokens in / out | Cost |",
+             "|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|",
+             f"| {s['n']} | **{s['accuracy']:.0%}** | {a['sop']:.0%} | {a['idk']:.0%} | {a['jobs']:.0%} | "
+             f"{s['citation_rate']:.0%} | {s['citation_hit_sop']:.0%} | {s['latency_ms_p50']:.0f} / {s['latency_ms_p95']:.0f} ms | "
+             f"{s['llm_calls']} | {s['input_tokens']:,} / {s['output_tokens']:,} | ${s['cost_usd']:.4f} |", ""]
+    if s["failures"]:
+        lines += ["Failures:", ""] + [f"- `{f['id']}` {f['q']} → {f['why']}" for f in s["failures"]] + [""]
+    return "\n".join(lines)
+
+
 def print_summary(s: dict) -> None:
     print(f"\n== {s['label']} · {s['mode']} ==")
     print(f"accuracy        {s['accuracy']:.0%}  (sop {s['accuracy_by_type']['sop']:.0%} · "
@@ -155,4 +178,8 @@ if __name__ == "__main__":
     ap.add_argument("--no-reload", action="store_true")
     ap.add_argument("--questions", default="questions.json", help="questions.json or questions_holdout.json")
     a = ap.parse_args()
-    print_summary(run(a.label, reload=not a.no_reload, questions=a.questions))
+    summary = run(a.label, reload=not a.no_reload, questions=a.questions)
+    print_summary(summary)
+    if os.getenv("GITHUB_STEP_SUMMARY"):            # shows as a table on the GitHub Actions run page
+        with open(os.environ["GITHUB_STEP_SUMMARY"], "a") as f:
+            f.write(markdown_summary(summary) + "\n")

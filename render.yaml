@@ -20,5 +20,7 @@ services:
           property: connectionString
       - key: TZ
         value: America/New_York
+      - key: AUTH_MODE         # public demo: one-click roles, fictional data only
+        value: demo
       - key: ANTHROPIC_API_KEY   # optional; leave blank to run fully offline
         sync: false

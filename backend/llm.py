@@ -9,8 +9,10 @@ from __future__ import annotations
 import os
 
 MODEL = os.getenv("CLAUDE_MODEL", "claude-sonnet-5-5")
-PRICE_IN = float(os.getenv("PRICE_IN_PER_MTOK", "0") or 0)
-PRICE_OUT = float(os.getenv("PRICE_OUT_PER_MTOK", "0") or 0)
+# Defaults = Claude Sonnet 5.5 list price (USD per million tokens), platform.claude.com pricing, Nov 2026.
+# Override if you change CLAUDE_MODEL.
+PRICE_IN = float(os.getenv("PRICE_IN_PER_MTOK", "2") or 0)
+PRICE_OUT = float(os.getenv("PRICE_OUT_PER_MTOK", "10") or 0)
 
 USAGE = {"calls": 0, "input_tokens": 0, "output_tokens": 0}
 

@@ -1,8 +1,12 @@
-"""Shared Streamlit helpers: DB access, demo sign-in, and the 'as of' clock.
+"""Shared Streamlit helpers: DB access, sign-in, and the 'as of' clock.
 
-Sign-in here is a DEMO picker (no passwords) so you can switch between Manager and
-Technician views. Real access control still happens in the backend: every query and
-every action is checked against the signed-in user's role.
+Two sign-in modes (env AUTH_MODE):
+  demo      (default) one-click role picker so anyone can try Manager and Technician views.
+            Only for public demos with fictional data — anyone can pick Manager.
+  password  real sign-in: username + password, checked against salted PBKDF2 hashes.
+            Set passwords with `python -m backend.set_password <username>`.
+Either way, access control happens in the backend: every query and every action is
+checked against the signed-in user's role.
 """
 from __future__ import annotations
 
@@ -15,7 +19,7 @@ import streamlit as st
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))  # make `backend` importable
 
 from backend import db  # noqa: E402
-from backend.auth import User, get_user, list_users  # noqa: E402
+from backend.auth import AUTH_MODE, User, authenticate, get_user, list_users  # noqa: E402
 
 
 def conn():
@@ -42,6 +46,8 @@ def sidebar() -> tuple[User, datetime]:
         st.stop()
     labels = dict(options)
     names = [u for u, _ in options]
+    if AUTH_MODE == "password" and not st.session_state.get("auth_user"):
+        _login_form()
     with st.sidebar:
         st.markdown("### Signed in as")
         now = datetime.now().replace(second=0, microsecond=0)
@@ -60,9 +66,18 @@ def sidebar() -> tuple[User, datetime]:
         def keep(k):
             return lambda: ss.update({f"_{k}": ss[f"w_{k}"]})
 
-        username = st.selectbox("User", names, format_func=labels.get, label_visibility="collapsed",
-                                key="w_username", on_change=keep("username"))
-        st.caption("Demo sign-in. Permissions are enforced in the backend.")
+        if AUTH_MODE == "password":
+            username = st.session_state["auth_user"]
+            st.markdown(labels.get(username, username))
+            if st.button("Sign out"):
+                st.session_state.pop("auth_user", None)
+                st.rerun()
+        else:
+            username = st.selectbox("User", names, format_func=labels.get, label_visibility="collapsed",
+                                    key="w_username", on_change=keep("username"))
+            st.warning("**Demo mode — no passwords.** Pick any role to see what it can do. "
+                       "Roles are enforced in the backend; a real deployment uses `AUTH_MODE=password`.",
+                       icon="🔓")
 
         st.markdown("### Clock")
         if st.toggle("Live (now)", key="w_live", on_change=keep("live")):
@@ -82,3 +97,20 @@ def role_badge(user: User) -> None:
         st.caption(f"👤 **{user.name}** · Manager — you see every job.")
     else:
         st.caption(f"👤 **{user.name}** ({user.technician_id}) · Technician — you see only your own jobs.")
+
+
+def _login_form() -> None:
+    """Password sign-in (AUTH_MODE=password). Stops the page until the user signs in."""
+    st.title("NorthStar Dispatch")
+    with st.form("login"):
+        st.markdown("#### Sign in")
+        u = st.text_input("Username", placeholder="manager or t-001")
+        p = st.text_input("Password", type="password")
+        if st.form_submit_button("Sign in", type="primary"):
+            with conn() as c:
+                user = authenticate(c, u, p)
+            if user:
+                st.session_state["auth_user"] = user.username
+                st.rerun()
+            st.error("Wrong username or password.")
+    st.stop()

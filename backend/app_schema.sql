@@ -54,3 +54,6 @@ CREATE TABLE IF NOT EXISTS customer_messages (
     approved_by  TEXT NOT NULL,
     created_at   TIMESTAMP NOT NULL
 );
+
+-- Real sign-in (AUTH_MODE=password). NULL = this user cannot log in with a password.
+ALTER TABLE users ADD COLUMN IF NOT EXISTS password_hash TEXT;

@@ -1,6 +1,10 @@
 # dispatch-copilot
 
+[![CI](https://github.com/Akashrao0417/dispatch-copilot/actions/workflows/ci.yml/badge.svg)](https://github.com/Akashrao0417/dispatch-copilot/actions/workflows/ci.yml)
+
 A dispatcher copilot for **NorthStar Logistics** — messy real business data in, clear action out.
+
+![Dispatch Copilot: dashboard, plain-English answers with proof, an "I don't know", and an approved reassignment](docs/demo.gif)
 
 **Live demo:** [dispatch-copilot-0u7q.onrender.com](https://dispatch-copilot-0u7q.onrender.com) _(free tier: first load can take ~1 min while it wakes up)_ · **Demo video:** [docs/demo.mp4](docs/demo.mp4) · **Case study:** [docs/case_study.md](docs/case_study.md) · **Evals:** [docs/evals.md](docs/evals.md)
 
@@ -9,6 +13,7 @@ A dispatcher copilot for **NorthStar Logistics** — messy real business data in
 | Eval accuracy (30 questions) | **70% → 100%** after fixing the worst failures · **90%** on 10 held-out questions |
 | "I don't know" when the SOPs don't cover it | 7/7 on the main set |
 | Actions without a human Approve | **0** — every action is proposed, approved, then logged |
+| Tests | **32 test functions → 75 test cases** (parametrized), run in CI on every push |
 
 ## Architecture
 
@@ -98,6 +103,11 @@ So jobs slip, nobody knows which ones are late or why, and customers keep callin
 7. **Roles** — `backend/auth.py`. **Manager** sees every job and can use all tools.
    **Technician** sees only their own jobs and can only create tickets on them. Enforced in the
    backend on every query and action, not just hidden in the UI.
+   **Sign-in has two modes** (`AUTH_MODE`):
+   - `demo` (the public live site): a one-click role picker with **no passwords**, so anyone can try
+     both roles — and anyone can pick Manager. Fine for fictional data, not for real data.
+   - `password`: real sign-in with salted PBKDF2-SHA256 hashes (Python standard library,
+     constant-time comparison). Set passwords with `python -m backend.set_password manager`.
 8. **Action agent with exactly 3 tools** — `backend/agent.py`:
    `reassign_technician`, `create_ticket`, `draft_customer_update`.
    The planner (Claude tool use, or SOP rules without a key) **proposes**; nothing changes until a
@@ -115,7 +125,7 @@ So jobs slip, nobody knows which ones are late or why, and customers keep callin
 
 ## Run it
 
-Requires Python 3.11+ and Postgres (Docker is easiest).
+Requires Python 3.12+ and Postgres (Docker is easiest). Dependencies are pinned to the exact versions CI tests.
 
 ```bash
 pip install -r requirements.txt
@@ -126,16 +136,19 @@ python docs/sops/build_sops.py                # (re)builds the 5 SOP PDFs from d
 uvicorn backend.crm_api:app --port 8001 &     # fake CRM API
 python -m backend.etl                         # clean + load + report + users/audit tables
 streamlit run frontend/app.py                 # http://localhost:8501
-pytest                                        # 53 tests (DB tests use throwaway databases)
+pytest                                        # 75 test cases from 32 test functions (DB tests use throwaway databases)
 python -m evals.run_evals --label run         # 30-question eval: accuracy, citations, latency, cost
 ```
 
 Optional: `export ANTHROPIC_API_KEY=...` to let Claude write SOP answers and plan actions
 (`CLAUDE_MODEL` picks the model). Everything works without it.
 
-**Demo:** sign in as *Manager* in the sidebar → **Ask Copilot** → "Which jobs are late in Charlotte
-today, and why?" → **Actions** → *Suggest actions* → approve "Reassign J-1005 to T-001 (Priya Sharma)"
-→ **Audit Log**. Then sign in as a technician and see only their jobs.
+**Demo:** pick *Manager* in the sidebar → **Ask Copilot** → "Which jobs are late in Charlotte
+today, and why?" → **Actions** → *Suggest actions* → approve a suggested reassignment
+→ **Audit Log**. Then pick a technician and see only their jobs.
+
+**Real sign-in:** `AUTH_MODE=password streamlit run frontend/app.py` after setting passwords with
+`python -m backend.set_password <username>`.
 
 **With Docker:** `docker compose --profile app up --build` → http://localhost:8501 (Postgres + app; demo data
 is seeded automatically on first start).
@@ -148,10 +161,11 @@ is seeded automatically on first start).
 3. On start, `backend/bootstrap.py` seeds a fresh demo day if the data is from an earlier day.
 
 Free tier notes: the web service sleeps after 15 min idle (about a minute to wake) and free Postgres
-expires after 30 days; a new database is re-seeded automatically. Demo sign-in has no passwords —
-only fictional data should ever be loaded into a public deploy.
+expires after 30 days; a new database is re-seeded automatically. The live site runs `AUTH_MODE=demo`
+(no passwords) — only fictional data should ever be loaded into a public deploy.
 
-Config via env vars (see `.env.example`): `DATABASE_URL`, `CRM_API_URL`, `ANTHROPIC_API_KEY`, `CLAUDE_MODEL`.
+Config via env vars (see `.env.example`): `DATABASE_URL`, `CRM_API_URL`, `AUTH_MODE`, `ANTHROPIC_API_KEY`,
+`CLAUDE_MODEL`.
 
 ## Repo layout
 
@@ -160,7 +174,9 @@ data/        generator + raw messy sources
 backend/     CRM API · ETL · schema · auth (roles) · queries · rag · copilot · agent · llm
 frontend/    Streamlit: app.py (navigation) + views/ (dashboard, ask, actions, audit)
 docs/        data quality report · data dictionary · sops/ (5 PDFs + source)
-tests/       test_etl.py · test_copilot.py (RAG, roles, agent, audit) · test_evals.py (regression guard)
+tests/       test_etl.py · test_copilot.py (RAG, roles, agent, audit) · test_auth_and_routing.py
+             (passwords, permission matrix, router, startup) · test_evals.py (regression guard)
+.github/     CI: tests + evals against Postgres on every push
 evals/       30 questions + 10 held-out, runner, results
 Dockerfile · docker-compose.yml · render.yaml
 ```

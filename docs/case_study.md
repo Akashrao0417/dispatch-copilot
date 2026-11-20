@@ -37,8 +37,8 @@ scored 90%; the remaining miss is a known limit of keyword retrieval.
 
 ## What I'd do next
 
-Move to semantic retrieval and re-run both eval sets. Replace demo sign-in with real
-authentication. Connect the approved customer messages to SMS and email.
+Move to semantic retrieval and re-run both eval sets. Put the real sign-in mode (already built) in front of any
+non-demo deployment. Connect the approved customer messages to SMS and email.
 
 **Stack:** Python, pandas, FastAPI, Postgres, Streamlit, BM25 retrieval, optional Claude, pytest
-(53 tests), Docker, Render.
+(75 test cases), Docker, Render.

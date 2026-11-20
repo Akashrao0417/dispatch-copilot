@@ -6,9 +6,18 @@ Technician  sees only jobs assigned to them; may create tickets on their own job
 """
 from __future__ import annotations
 
+import hashlib
+import hmac
+import os
+import secrets
 from dataclasses import dataclass
 
 TOOLS = ("reassign_technician", "create_ticket", "draft_customer_update")
+
+# "demo": one-click role picker (public demo, fictional data only).
+# "password": real sign-in; users need a password set with `python -m backend.set_password <username>`.
+AUTH_MODE = os.getenv("AUTH_MODE", "demo").strip().lower()
+PBKDF2_ITERATIONS = 310_000
 
 PERMISSIONS = {
     "manager": set(TOOLS),
@@ -67,3 +76,47 @@ def check_tool(user: User, tool: str, job: dict) -> None:
         raise PermissionDenied(f"{user.username} cannot access job {job.get('job_id')}")
     if tool not in PERMISSIONS[user.role]:
         raise PermissionDenied(f"role {user.role!r} may not use {tool}")
+
+
+# --------------------------------------------------------------------------- passwords
+def hash_password(password: str, *, salt: bytes | None = None, iterations: int = PBKDF2_ITERATIONS) -> str:
+    """PBKDF2-SHA256 with a random salt, stored as 'pbkdf2_sha256$iterations$salt_hex$hash_hex'."""
+    if len(password) < 8:
+        raise ValueError("password must be at least 8 characters")
+    salt = salt or secrets.token_bytes(16)
+    digest = hashlib.pbkdf2_hmac("sha256", password.encode(), salt, iterations)
+    return f"pbkdf2_sha256${iterations}${salt.hex()}${digest.hex()}"
+
+
+def verify_password(password: str, stored: str | None) -> bool:
+    if not stored:
+        return False
+    try:
+        algo, iterations, salt_hex, hash_hex = stored.split("$")
+    except ValueError:
+        return False
+    if algo != "pbkdf2_sha256":
+        return False
+    digest = hashlib.pbkdf2_hmac("sha256", password.encode(), bytes.fromhex(salt_hex), int(iterations))
+    return hmac.compare_digest(digest.hex(), hash_hex)  # constant-time
+
+
+def set_password(conn, username: str, password: str) -> None:
+    with conn.cursor() as cur:
+        cur.execute("UPDATE users SET password_hash = %s WHERE username = %s", (hash_password(password), username))
+        if cur.rowcount != 1:
+            raise PermissionDenied(f"unknown user {username!r}")
+
+
+def authenticate(conn, username: str, password: str) -> User | None:
+    """Return the user if the password matches, else None (same answer for unknown users)."""
+    with conn.cursor() as cur:
+        cur.execute("SELECT username, name, role, technician_id, password_hash FROM users WHERE username = %s",
+                    (username.strip().lower(),))
+        row = cur.fetchone()
+    stored = row["password_hash"] if row else None
+    if not verify_password(password, stored or hash_password("x" * 12)):  # same work for unknown users
+        return None
+    if not row or not stored:
+        return None
+    return User(row["username"], row["name"], row["role"], row["technician_id"])

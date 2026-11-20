@@ -2,7 +2,7 @@
 
 A dispatcher copilot for **NorthStar Logistics** — messy real business data in, clear action out.
 
-**Live demo:** _coming soon_ · **Demo video:** [docs/demo.mp4](docs/demo.mp4) · **Case study:** [docs/case_study.md](docs/case_study.md) · **Evals:** [docs/evals.md](docs/evals.md)
+**Live demo:** [dispatch-copilot-0u7q.onrender.com](https://dispatch-copilot-0u7q.onrender.com) _(free tier: first load can take ~1 min while it wakes up)_ · **Demo video:** [docs/demo.mp4](docs/demo.mp4) · **Case study:** [docs/case_study.md](docs/case_study.md) · **Evals:** [docs/evals.md](docs/evals.md)
 
 | | |
 |---|---|

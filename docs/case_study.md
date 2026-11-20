@@ -33,7 +33,8 @@ I wrote 30 questions with known answers: SOP questions, questions that must get 
 job lookups graded against an independent pandas calculation. The baseline scored 70%. I ranked
 failures by harm. Confidently answering an out-of-scope question ranked first, ahead of misrouted
 questions. I fixed the root causes (a weak evidence gate, a router that misread procedure questions, a missing filter) and reached 30/30. I then ran 10 new held-out questions once and
-scored 90%; the remaining miss is a known limit of keyword retrieval.
+scored 90% offline; the miss was a known limit of keyword retrieval. With Claude turned on, the held-out set
+scored 100%, at about $0.003 per question.
 
 ## What I'd do next
 

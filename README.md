@@ -10,8 +10,9 @@ A dispatcher copilot for **NorthStar Logistics** — messy real business data in
 
 | | |
 |---|---|
-| Eval accuracy (30 questions) | **70% → 100%** after fixing the worst failures · **90%** on 10 held-out questions |
-| "I don't know" when the SOPs don't cover it | 7/7 on the main set |
+| Eval accuracy (30 questions) | **70% → 100%** after fixing the worst failures · held-out (10 new): **90%** offline, **100% with Claude** |
+| With Claude (Sonnet 5.5) | 1.5 s median per SOP answer · **$0.10 for all 40 questions** · [run on GitHub Actions](https://github.com/Akashrao0417/dispatch-copilot/actions/runs/44677943331) |
+| "I don't know" when the SOPs don't cover it | 7/7 main set · 2/2 held-out with Claude (1/2 offline) |
 | Actions without a human Approve | **0** — every action is proposed, approved, then logged |
 | Tests | **32 test functions → 75 test cases** (parametrized), run in CI on every push |
 

@@ -56,7 +56,27 @@ and any answer without a valid citation is turned into "I don't know"):
 Cost is reported from real token usage at Sonnet 5.5 list price ($2 / $10 per million input / output
 tokens); a full 40-question run is a few cents. Job questions never call the model (answers come from SQL).
 
-_Claude results: to be added after the first run._
+### Claude results (run #1, 2026-11-20, `claude-sonnet-5-5`)
+
+Run on GitHub Actions ([Evals with Claude #1](https://github.com/Akashrao0417/dispatch-copilot/actions/runs/44677943331)),
+same questions and grader as the offline runs.
+
+| Set | Qs | Accuracy | SOP | I don't know | Jobs | Citation rate | SOP citation hit | Latency p50 / p95 | Model calls | Tokens in / out | Cost |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| Main | 30 | **100%** | 100% | 100% (7/7) | 100% | 96% | 100% | 1532 / 3797 ms | 22 | 12,258 / 4,532 | $0.0698 |
+| Held-out | 10 | **100%** | 100% | **100% (2/2)** | 100% | 100% | 100% | 2047 / 4149 ms | 9 | 5,181 / 1,961 | $0.0300 |
+
+**What changed vs offline:** the held-out miss ("How many sick days do drivers get per year?") is now a
+correct "I don't know". Retrieval still finds SOP-RA §2 (it contains "sick" and "technician"), but Claude
+reads it, sees it doesn't answer the question, and refuses — and the citation guardrail would have turned any
+uncited answer into "I don't know" anyway. The two layers together fix what keyword search alone could not.
+
+**Cost of that:** ~1.5-2 s median latency per SOP answer (vs ~0 ms offline) and about **$0.003 per question**
+(31 model calls, $0.10 for all 40 questions). Job questions never call the model, so their answers stay instant
+and always match the database.
+
+**Caveats:** one run (model output can vary between runs), 40 questions total, and the main set is the one the
+fixes were made against. The held-out 10/10 is the more meaningful number, on a small sample.
 
 ## Held-out: honest number
 

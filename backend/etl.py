@@ -298,7 +298,7 @@ def load(clean: dict, stats: dict, database_url: str = DATABASE_URL) -> None:
             cols = list(df.columns)
             rows = [tuple(_py(v) for v in r) for r in df.itertuples(index=False, name=None)]
             execute_values(cur, f"INSERT INTO {table} ({', '.join(cols)}) VALUES %s", rows)
-        cur.execute("INSERT INTO etl_runs (stats) VALUES (%s)", (Json(stats),))
+        cur.execute("INSERT INTO etl_runs (ran_at, stats) VALUES (%s, %s)", (datetime.now(), Json(stats)))
         # App tables (users, actions, audit log) are created if missing and never dropped.
         from backend.db import init_app_tables
         init_app_tables(conn)

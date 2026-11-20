@@ -1,0 +1,685 @@
+{
+  "summary": {
+    "label": "baseline",
+    "ran_at": "2026-11-19T22:58:19",
+    "mode": "offline (extractive answers, no model calls)",
+    "n": 30,
+    "accuracy": 0.7,
+    "accuracy_by_type": {
+      "sop": 0.6,
+      "idk": 0.7142857142857143,
+      "jobs": 0.875
+    },
+    "citation_rate": 0.96,
+    "citation_hit_sop": 0.6,
+    "latency_ms_p50": 0.1,
+    "latency_ms_p95": 2.7,
+    "llm_calls": 0,
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "cost_usd": 0.0,
+    "failures": [
+      {
+        "id": "sop-01",
+        "q": "When does a job count as delayed?",
+        "why": "routed to jobs"
+      },
+      {
+        "id": "sop-02",
+        "q": "What are the SLA deadlines for Gold, Silver and Bronze customers?",
+        "why": "routed to jobs"
+      },
+      {
+        "id": "sop-03",
+        "q": "How often should dispatchers check the delayed jobs list?",
+        "why": "routed to jobs"
+      },
+      {
+        "id": "sop-04",
+        "q": "Which delayed jobs should I handle first?",
+        "why": "routed to jobs"
+      },
+      {
+        "id": "sop-06",
+        "q": "How quickly must a customer hear from us after their job is delayed?",
+        "why": "routed to jobs"
+      },
+      {
+        "id": "sop-11",
+        "q": "How do I choose which technician gets a reassigned job?",
+        "why": "cited ['SOP-RA \u00a76', 'SOP-RA \u00a72'] (want SOP-RA \u00a73)"
+      },
+      {
+        "id": "idk-02",
+        "q": "How do I reset my email password?",
+        "why": "answered instead of I don't know: 'Use a short, friendly, professional tone. Send by SMS when a phone number is on file, otherwise by e'"
+      },
+      {
+        "id": "idk-03",
+        "q": "What's the overtime pay rate for technicians?",
+        "why": "answered instead of I don't know: 'Notify both technicians, keep the original job ID, and send the customer an update with the new tech'"
+      },
+      {
+        "id": "job-06",
+        "q": "Which Gold customers have late jobs today?",
+        "why": "extra ['J-1005', 'J-1011', 'J-1016', 'J-1032', 'J-1086', 'J-1087'] missing [] (got 15, want 3)"
+      }
+    ]
+  },
+  "rows": [
+    {
+      "id": "sop-01",
+      "type": "sop",
+      "q": "When does a job count as delayed?",
+      "as": "manager",
+      "latency_ms": 95.9,
+      "cost_usd": 0.0,
+      "calls": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "kind": "jobs",
+      "citations": [
+        "SOP-LD \u00a75"
+      ],
+      "cited": true,
+      "cite_hit": false,
+      "correct": false,
+      "why": "routed to jobs",
+      "answer": "**15 of 100 jobs are late today** (as of 14:00):\n\n- **J-1155** \u00b7 Queen City Vet Hospital (Gold) \u00b7 Andre Patel \u00b7 2h 35m late, SLA breached, status Completed. Why: Customer not home \u2014 \u201cGate locked, customer unreachable\u201d (ticket TK-5080)\n- **J-1140** \u00b7 Ironwood Clinic (Gold) \u00b7 Fatima Brown \u00b7 15m late, SLA breached, status In Progress. Why: Address issue \u2014 \u201cSuite number missing in order\u201d (ticket TK-5068)\n- **J-1059** \u00b7 Tar Heel Grocers (Gold) \u00b7 Tom Johnson \u00b7 2h 25m late, SLA breached, status Completed. Why: Vehicle breakdown \u2014 \u201cVan flat tire, waiting on roadside\u201d (ticket TK-5025)\n- **J-1116** \u00b7 Pi"
+    },
+    {
+      "id": "sop-02",
+      "type": "sop",
+      "q": "What are the SLA deadlines for Gold, Silver and Bronze customers?",
+      "as": "manager",
+      "latency_ms": 3.1,
+      "cost_usd": 0.0,
+      "calls": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "kind": "jobs",
+      "citations": [
+        "SOP-LD \u00a75"
+      ],
+      "cited": true,
+      "cite_hit": false,
+      "correct": false,
+      "why": "routed to jobs",
+      "answer": "**7 of 100 jobs are in SLA breach today** (as of 14:00):\n\n- **J-1155** \u00b7 Queen City Vet Hospital (Gold) \u00b7 Andre Patel \u00b7 2h 35m late, SLA breached, status Completed. Why: Customer not home \u2014 \u201cGate locked, customer unreachable\u201d (ticket TK-5080)\n- **J-1140** \u00b7 Ironwood Clinic (Gold) \u00b7 Fatima Brown \u00b7 15m late, SLA breached, status In Progress. Why: Address issue \u2014 \u201cSuite number missing in order\u201d (ticket TK-5068)\n- **J-1059** \u00b7 Tar Heel Grocers (Gold) \u00b7 Tom Johnson \u00b7 2h 25m late, SLA breached, status Completed. Why: Vehicle breakdown \u2014 \u201cVan flat tire, waiting on roadside\u201d (ticket TK-5025)\n- **J-111"
+    },
+    {
+      "id": "sop-03",
+      "type": "sop",
+      "q": "How often should dispatchers check the delayed jobs list?",
+      "as": "manager",
+      "latency_ms": 2.7,
+      "cost_usd": 0.0,
+      "calls": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "kind": "jobs",
+      "citations": [
+        "SOP-LD \u00a75"
+      ],
+      "cited": true,
+      "cite_hit": false,
+      "correct": false,
+      "why": "routed to jobs",
+      "answer": "**15 of 100 jobs are late today** (as of 14:00):\n\n- **J-1155** \u00b7 Queen City Vet Hospital (Gold) \u00b7 Andre Patel \u00b7 2h 35m late, SLA breached, status Completed. Why: Customer not home \u2014 \u201cGate locked, customer unreachable\u201d (ticket TK-5080)\n- **J-1140** \u00b7 Ironwood Clinic (Gold) \u00b7 Fatima Brown \u00b7 15m late, SLA breached, status In Progress. Why: Address issue \u2014 \u201cSuite number missing in order\u201d (ticket TK-5068)\n- **J-1059** \u00b7 Tar Heel Grocers (Gold) \u00b7 Tom Johnson \u00b7 2h 25m late, SLA breached, status Completed. Why: Vehicle breakdown \u2014 \u201cVan flat tire, waiting on roadside\u201d (ticket TK-5025)\n- **J-1116** \u00b7 Pi"
+    },
+    {
+      "id": "sop-04",
+      "type": "sop",
+      "q": "Which delayed jobs should I handle first?",
+      "as": "manager",
+      "latency_ms": 2.4,
+      "cost_usd": 0.0,
+      "calls": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "kind": "jobs",
+      "citations": [
+        "SOP-LD \u00a75"
+      ],
+      "cited": true,
+      "cite_hit": false,
+      "correct": false,
+      "why": "routed to jobs",
+      "answer": "**15 of 100 jobs are late today** (as of 14:00):\n\n- **J-1155** \u00b7 Queen City Vet Hospital (Gold) \u00b7 Andre Patel \u00b7 2h 35m late, SLA breached, status Completed. Why: Customer not home \u2014 \u201cGate locked, customer unreachable\u201d (ticket TK-5080)\n- **J-1140** \u00b7 Ironwood Clinic (Gold) \u00b7 Fatima Brown \u00b7 15m late, SLA breached, status In Progress. Why: Address issue \u2014 \u201cSuite number missing in order\u201d (ticket TK-5068)\n- **J-1059** \u00b7 Tar Heel Grocers (Gold) \u00b7 Tom Johnson \u00b7 2h 25m late, SLA breached, status Completed. Why: Vehicle breakdown \u2014 \u201cVan flat tire, waiting on roadside\u201d (ticket TK-5025)\n- **J-1116** \u00b7 Pi"
+    },
+    {
+      "id": "sop-05",
+      "type": "sop",
+      "q": "When do I escalate to the shift manager?",
+      "as": "manager",
+      "latency_ms": 0.1,
+      "cost_usd": 0.0,
+      "calls": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "kind": "sop",
+      "citations": [
+        "SOP-LD \u00a77"
+      ],
+      "cited": true,
+      "cite_hit": true,
+      "correct": true,
+      "why": "",
+      "answer": "Escalate to the shift manager when a Gold job is in SLA breach, when 3 or more jobs in one city are delayed at the same time, or when a job is more than 4 hours late. [SOP-LD \u00a77]"
+    },
+    {
+      "id": "sop-06",
+      "type": "sop",
+      "q": "How quickly must a customer hear from us after their job is delayed?",
+      "as": "manager",
+      "latency_ms": 2.2,
+      "cost_usd": 0.0,
+      "calls": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "kind": "jobs",
+      "citations": [
+        "SOP-LD \u00a75"
+      ],
+      "cited": true,
+      "cite_hit": false,
+      "correct": false,
+      "why": "routed to jobs",
+      "answer": "**15 of 100 jobs are late today** (as of 14:00):\n\n- **J-1155** \u00b7 Queen City Vet Hospital (Gold) \u00b7 Andre Patel \u00b7 2h 35m late, SLA breached, status Completed. Why: Customer not home \u2014 \u201cGate locked, customer unreachable\u201d (ticket TK-5080)\n- **J-1140** \u00b7 Ironwood Clinic (Gold) \u00b7 Fatima Brown \u00b7 15m late, SLA breached, status In Progress. Why: Address issue \u2014 \u201cSuite number missing in order\u201d (ticket TK-5068)\n- **J-1059** \u00b7 Tar Heel Grocers (Gold) \u00b7 Tom Johnson \u00b7 2h 25m late, SLA breached, status Completed. Why: Vehicle breakdown \u2014 \u201cVan flat tire, waiting on roadside\u201d (ticket TK-5025)\n- **J-1116** \u00b7 Pi"
+    },
+    {
+      "id": "sop-07",
+      "type": "sop",
+      "q": "What credit does a Silver customer get for an SLA breach?",
+      "as": "manager",
+      "latency_ms": 0.1,
+      "cost_usd": 0.0,
+      "calls": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "kind": "sop",
+      "citations": [
+        "SOP-RF \u00a73",
+        "SOP-RF \u00a72"
+      ],
+      "cited": true,
+      "cite_hit": true,
+      "correct": true,
+      "why": "",
+      "answer": "SLA breach: Gold 25% of the job fee, Silver 15%, Bronze 10%. Cancellation by NorthStar with under 24 hours notice: 20%. Repeat visit due to our error: the repeat visit is free. Full refunds require a manager. [SOP-RF \u00a73] A customer is eligible for a credit when a job is in SLA breach, when a job is cancelled by NorthStar with less than 24 hours notice, or when a repeat visit is needed because of our error. [SOP-RF \u00a72]"
+    },
+    {
+      "id": "sop-08",
+      "type": "sop",
+      "q": "Can a dispatcher approve a full refund?",
+      "as": "manager",
+      "latency_ms": 0.1,
+      "cost_usd": 0.0,
+      "calls": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "kind": "sop",
+      "citations": [
+        "SOP-RF \u00a74",
+        "SOP-RF \u00a71"
+      ],
+      "cited": true,
+      "cite_hit": true,
+      "correct": true,
+      "why": "",
+      "answer": "Dispatchers may offer credits up to 25% of the job fee. Credits above 25% and all full refunds need shift manager approval. Technicians may not promise credits or refunds to customers. [SOP-RF \u00a74] Sets when customers receive a service credit or refund for late or failed jobs, and who may approve it. [SOP-RF \u00a71]"
+    },
+    {
+      "id": "sop-09",
+      "type": "sop",
+      "q": "How long does a refund to a card take?",
+      "as": "manager",
+      "latency_ms": 0.1,
+      "cost_usd": 0.0,
+      "calls": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "kind": "sop",
+      "citations": [
+        "SOP-RF \u00a76"
+      ],
+      "cited": true,
+      "cite_hit": true,
+      "correct": true,
+      "why": "",
+      "answer": "Credits are applied to the customer's next invoice. Refunds to card are processed by Finance within 5 business days. [SOP-RF \u00a76]"
+    },
+    {
+      "id": "sop-10",
+      "type": "sop",
+      "q": "Who is allowed to reassign a job?",
+      "as": "manager",
+      "latency_ms": 0.1,
+      "cost_usd": 0.0,
+      "calls": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "kind": "sop",
+      "citations": [
+        "SOP-RA \u00a74",
+        "SOP-RA \u00a77"
+      ],
+      "cited": true,
+      "cite_hit": true,
+      "correct": true,
+      "why": "",
+      "answer": "Only dispatchers and managers may reassign jobs. Technicians may request a reassignment by creating a ticket on their job but may not move jobs themselves. [SOP-RA \u00a74] Do not reassign a job more than twice. A third change requires the shift manager. [SOP-RA \u00a77]"
+    },
+    {
+      "id": "sop-11",
+      "type": "sop",
+      "q": "How do I choose which technician gets a reassigned job?",
+      "as": "manager",
+      "latency_ms": 0.1,
+      "cost_usd": 0.0,
+      "calls": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "kind": "sop",
+      "citations": [
+        "SOP-RA \u00a76",
+        "SOP-RA \u00a72"
+      ],
+      "cited": true,
+      "cite_hit": false,
+      "correct": false,
+      "why": "cited ['SOP-RA \u00a76', 'SOP-RA \u00a72'] (want SOP-RA \u00a73)",
+      "answer": "Notify both technicians, keep the original job ID, and send the customer an update with the new technician's first name and ETA following SOP-CU. [SOP-RA \u00a76] Reassign when the assigned technician cannot reach the job before its SLA deadline (vehicle breakdown, parts missing, sick or off shift), or when a free technician in the same city can arrive at least 30 minutes sooner. [SOP-RA \u00a72]"
+    },
+    {
+      "id": "sop-12",
+      "type": "sop",
+      "q": "Can a job be reassigned three times?",
+      "as": "manager",
+      "latency_ms": 0.1,
+      "cost_usd": 0.0,
+      "calls": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "kind": "sop",
+      "citations": [
+        "SOP-RA \u00a77"
+      ],
+      "cited": true,
+      "cite_hit": true,
+      "correct": true,
+      "why": "",
+      "answer": "Do not reassign a job more than twice. A third change requires the shift manager. [SOP-RA \u00a77]"
+    },
+    {
+      "id": "sop-13",
+      "type": "sop",
+      "q": "What does the pre-trip vehicle check include?",
+      "as": "manager",
+      "latency_ms": 0.1,
+      "cost_usd": 0.0,
+      "calls": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "kind": "sop",
+      "citations": [
+        "SOP-SC \u00a72"
+      ],
+      "cited": true,
+      "cite_hit": true,
+      "correct": true,
+      "why": "",
+      "answer": "Before the first job each day the technician checks tires, lights, brakes, mirrors and the load strap, and records the check in the driver app. A failed check means the vehicle may not leave the depot. [SOP-SC \u00a72]"
+    },
+    {
+      "id": "sop-14",
+      "type": "sop",
+      "q": "What should a technician do if the site is unsafe?",
+      "as": "manager",
+      "latency_ms": 0.0,
+      "cost_usd": 0.0,
+      "calls": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "kind": "sop",
+      "citations": [
+        "SOP-SC \u00a73"
+      ],
+      "cited": true,
+      "cite_hit": true,
+      "correct": true,
+      "why": "",
+      "answer": "On arrival the technician confirms safe parking, a clear walkway, and no visible hazards such as exposed wiring or standing water. If the site is unsafe the technician must not start work and must create a ticket. [SOP-SC \u00a73]"
+    },
+    {
+      "id": "sop-15",
+      "type": "sop",
+      "q": "What must every customer update include?",
+      "as": "manager",
+      "latency_ms": 0.1,
+      "cost_usd": 0.0,
+      "calls": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "kind": "sop",
+      "citations": [
+        "SOP-CU \u00a73"
+      ],
+      "cited": true,
+      "cite_hit": true,
+      "correct": true,
+      "why": "",
+      "answer": "Every update includes the job ID, an apology if we are late, the reason in plain words, the new ETA as a time window, and the first name of the technician. Do not share the technician's phone number or blame the technician. [SOP-CU \u00a73]"
+    },
+    {
+      "id": "idk-01",
+      "type": "idk",
+      "q": "What is the company vacation policy?",
+      "as": "manager",
+      "latency_ms": 0.0,
+      "cost_usd": 0.0,
+      "calls": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "kind": "idk",
+      "citations": [],
+      "cited": false,
+      "correct": true,
+      "why": "",
+      "answer": "I don't know"
+    },
+    {
+      "id": "idk-02",
+      "type": "idk",
+      "q": "How do I reset my email password?",
+      "as": "manager",
+      "latency_ms": 0.0,
+      "cost_usd": 0.0,
+      "calls": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "kind": "sop",
+      "citations": [
+        "SOP-CU \u00a74"
+      ],
+      "cited": true,
+      "correct": false,
+      "why": "answered instead of I don't know: 'Use a short, friendly, professional tone. Send by SMS when a phone number is on file, otherwise by e'",
+      "answer": "Use a short, friendly, professional tone. Send by SMS when a phone number is on file, otherwise by email. Gold customers also receive a phone call from dispatch. [SOP-CU \u00a74]"
+    },
+    {
+      "id": "idk-03",
+      "type": "idk",
+      "q": "What's the overtime pay rate for technicians?",
+      "as": "manager",
+      "latency_ms": 0.1,
+      "cost_usd": 0.0,
+      "calls": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "kind": "sop",
+      "citations": [
+        "SOP-RA \u00a76",
+        "SOP-RA \u00a73"
+      ],
+      "cited": true,
+      "correct": false,
+      "why": "answered instead of I don't know: 'Notify both technicians, keep the original job ID, and send the customer an update with the new tech'",
+      "answer": "Notify both technicians, keep the original job ID, and send the customer an update with the new technician's first name and ETA following SOP-CU. [SOP-RA \u00a76] Pick a technician whose home city matches the job's city and who has no open jobs (no job that is Scheduled, En Route or In Progress) for the day. Prefer the matching skill: Installer for installs, Repair Tech for repairs, any role for deliveries and pickups. [SOP-RA \u00a73]"
+    },
+    {
+      "id": "idk-04",
+      "type": "idk",
+      "q": "Who is the CEO of NorthStar?",
+      "as": "manager",
+      "latency_ms": 0.0,
+      "cost_usd": 0.0,
+      "calls": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "kind": "idk",
+      "citations": [],
+      "cited": false,
+      "correct": true,
+      "why": "",
+      "answer": "I don't know"
+    },
+    {
+      "id": "idk-05",
+      "type": "idk",
+      "q": "What's the weather forecast for Charlotte tomorrow?",
+      "as": "manager",
+      "latency_ms": 0.1,
+      "cost_usd": 0.0,
+      "calls": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "kind": "idk",
+      "citations": [],
+      "cited": false,
+      "correct": true,
+      "why": "",
+      "answer": "I don't know"
+    },
+    {
+      "id": "idk-06",
+      "type": "idk",
+      "q": "Can I bring my dog in the van?",
+      "as": "manager",
+      "latency_ms": 0.0,
+      "cost_usd": 0.0,
+      "calls": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "kind": "idk",
+      "citations": [],
+      "cited": false,
+      "correct": true,
+      "why": "",
+      "answer": "I don't know"
+    },
+    {
+      "id": "idk-07",
+      "type": "idk",
+      "q": "What is the dress code for technicians?",
+      "as": "manager",
+      "latency_ms": 0.0,
+      "cost_usd": 0.0,
+      "calls": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "kind": "idk",
+      "citations": [],
+      "cited": false,
+      "correct": true,
+      "why": "",
+      "answer": "I don't know"
+    },
+    {
+      "id": "job-01",
+      "type": "jobs",
+      "q": "Which jobs are late in Charlotte today, and why?",
+      "as": "manager",
+      "latency_ms": 1.7,
+      "cost_usd": 0.0,
+      "calls": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "kind": "jobs",
+      "citations": [
+        "SOP-LD \u00a75"
+      ],
+      "cited": true,
+      "correct": true,
+      "why": "",
+      "gold": [
+        "J-1005",
+        "J-1011",
+        "J-1059",
+        "J-1087",
+        "J-1140"
+      ],
+      "answer": "**5 of 34 jobs in Charlotte are late today** (as of 14:00):\n\n- **J-1140** \u00b7 Ironwood Clinic (Gold) \u00b7 Fatima Brown \u00b7 15m late, SLA breached, status In Progress. Why: Address issue \u2014 \u201cSuite number missing in order\u201d (ticket TK-5068)\n- **J-1059** \u00b7 Tar Heel Grocers (Gold) \u00b7 Tom Johnson \u00b7 2h 25m late, SLA breached, status Completed. Why: Vehicle breakdown \u2014 \u201cVan flat tire, waiting on roadside\u201d (ticket TK-5025)\n- **J-1087** \u00b7 Tar Heel Dental (Silver) \u00b7 Ravi Okafor \u00b7 3h 45m late, SLA breached, status In Progress. Why: Address issue \u2014 \u201cSuite number missing in order\u201d (ticket TK-5039)\n- **J-1011** \u00b7 Oak"
+    },
+    {
+      "id": "job-02",
+      "type": "jobs",
+      "q": "Any SLA breaches in Raleigh today?",
+      "as": "manager",
+      "latency_ms": 1.2,
+      "cost_usd": 0.0,
+      "calls": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "kind": "jobs",
+      "citations": [
+        "SOP-LD \u00a75"
+      ],
+      "cited": true,
+      "correct": true,
+      "why": "",
+      "gold": [
+        "J-1116"
+      ],
+      "answer": "**1 of 17 jobs in Raleigh are in SLA breach today** (as of 14:00):\n\n- **J-1116** \u00b7 Pinecrest Pharmacy (Silver) \u00b7 Ian Davis \u00b7 4h 30m late, SLA breached, status En Route. Why: Weather \u2014 \u201cLightning hold at site\u201d (ticket TK-5053)\n\nMost common reason: **Weather**."
+    },
+    {
+      "id": "job-03",
+      "type": "jobs",
+      "q": "show me delayed jobs in greensboro",
+      "as": "manager",
+      "latency_ms": 1.4,
+      "cost_usd": 0.0,
+      "calls": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "kind": "jobs",
+      "citations": [
+        "SOP-LD \u00a75"
+      ],
+      "cited": true,
+      "correct": true,
+      "why": "",
+      "gold": [
+        "J-1086",
+        "J-1092",
+        "J-1098",
+        "J-1155"
+      ],
+      "answer": "**4 of 25 jobs in Greensboro are late today** (as of 14:00):\n\n- **J-1155** \u00b7 Queen City Vet Hospital (Gold) \u00b7 Andre Patel \u00b7 2h 35m late, SLA breached, status Completed. Why: Customer not home \u2014 \u201cGate locked, customer unreachable\u201d (ticket TK-5080)\n- **J-1098** \u00b7 Ironwood Vet Hospital (Silver) \u00b7 Grace Garcia \u00b7 4h 00m late, SLA breached, status In Progress. Why: Vehicle breakdown \u2014 \u201cEngine warning light, pulled over\u201d (ticket TK-5044)\n- **J-1086** \u00b7 Summit Dental (Silver) \u00b7 Noah Johnson \u00b7 45m late, late, SLA not yet breached, status En Route. Why: Customer not home \u2014 \u201cGate locked, customer unreach"
+    },
+    {
+      "id": "job-04",
+      "type": "jobs",
+      "q": "Which jobs were late yesterday in Durham?",
+      "as": "manager",
+      "latency_ms": 1.0,
+      "cost_usd": 0.0,
+      "calls": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "kind": "jobs",
+      "citations": [],
+      "cited": false,
+      "correct": true,
+      "why": "",
+      "gold": [],
+      "answer": "No jobs in Durham are late on Nov 18 (checked 4 jobs, as of 14:00)."
+    },
+    {
+      "id": "job-05",
+      "type": "jobs",
+      "q": "What jobs are behind schedule in Winston-Salem today?",
+      "as": "manager",
+      "latency_ms": 1.1,
+      "cost_usd": 0.0,
+      "calls": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "kind": "jobs",
+      "citations": [
+        "SOP-LD \u00a75"
+      ],
+      "cited": true,
+      "correct": true,
+      "why": "",
+      "gold": [
+        "J-1016",
+        "J-1094"
+      ],
+      "answer": "**2 of 12 jobs in Winston-Salem are late today** (as of 14:00):\n\n- **J-1094** \u00b7 Riverbend Dental (Silver) \u00b7 Keisha Patel \u00b7 2h 22m late, SLA breached, status Completed. Why: Address issue \u2014 \u201cSuite number missing in order\u201d (ticket TK-5042)\n- **J-1016** \u00b7 Oakline Coffee Co (Silver) \u00b7 Lena Ali \u00b7 45m late, late, SLA not yet breached, status In Progress. Why: Traffic delay \u2014 \u201cRoad closure on Tryon St, rerouting\u201d (ticket TK-5008)\n\nMost common reason: **Traffic delay**."
+    },
+    {
+      "id": "job-06",
+      "type": "jobs",
+      "q": "Which Gold customers have late jobs today?",
+      "as": "manager",
+      "latency_ms": 2.5,
+      "cost_usd": 0.0,
+      "calls": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "kind": "jobs",
+      "citations": [
+        "SOP-LD \u00a75"
+      ],
+      "cited": true,
+      "correct": false,
+      "why": "extra ['J-1005', 'J-1011', 'J-1016', 'J-1032', 'J-1086', 'J-1087'] missing [] (got 15, want 3)",
+      "gold": [
+        "J-1059",
+        "J-1140",
+        "J-1155"
+      ],
+      "answer": "**15 of 100 jobs are late today** (as of 14:00):\n\n- **J-1155** \u00b7 Queen City Vet Hospital (Gold) \u00b7 Andre Patel \u00b7 2h 35m late, SLA breached, status Completed. Why: Customer not home \u2014 \u201cGate locked, customer unreachable\u201d (ticket TK-5080)\n- **J-1140** \u00b7 Ironwood Clinic (Gold) \u00b7 Fatima Brown \u00b7 15m late, SLA breached, status In Progress. Why: Address issue \u2014 \u201cSuite number missing in order\u201d (ticket TK-5068)\n- **J-1059** \u00b7 Tar Heel Grocers (Gold) \u00b7 Tom Johnson \u00b7 2h 25m late, SLA breached, status Completed. Why: Vehicle breakdown \u2014 \u201cVan flat tire, waiting on roadside\u201d (ticket TK-5025)\n- **J-1116** \u00b7 Pi"
+    },
+    {
+      "id": "job-07",
+      "type": "jobs",
+      "q": "Which of my jobs are late today?",
+      "as": "t-012",
+      "latency_ms": 1.0,
+      "cost_usd": 0.0,
+      "calls": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "kind": "jobs",
+      "citations": [
+        "SOP-LD \u00a75"
+      ],
+      "cited": true,
+      "correct": true,
+      "why": "",
+      "gold": [
+        "J-1140"
+      ],
+      "answer": "**1 of 1 jobs assigned to you are late today** (as of 14:00):\n\n- **J-1140** \u00b7 Ironwood Clinic (Gold) \u00b7 Fatima Brown \u00b7 15m late, SLA breached, status In Progress. Why: Address issue \u2014 \u201cSuite number missing in order\u201d (ticket TK-5068)\n\nMost common reason: **Address issue**."
+    },
+    {
+      "id": "job-08",
+      "type": "jobs",
+      "q": "Which CLT jobs are overdue right now?",
+      "as": "manager",
+      "latency_ms": 1.4,
+      "cost_usd": 0.0,
+      "calls": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "kind": "jobs",
+      "citations": [
+        "SOP-LD \u00a75"
+      ],
+      "cited": true,
+      "correct": true,
+      "why": "",
+      "gold": [
+        "J-1005",
+        "J-1011",
+        "J-1059",
+        "J-1087",
+        "J-1140"
+      ],
+      "answer": "**5 of 34 jobs in Charlotte are late today** (as of 14:00):\n\n- **J-1140** \u00b7 Ironwood Clinic (Gold) \u00b7 Fatima Brown \u00b7 15m late, SLA breached, status In Progress. Why: Address issue \u2014 \u201cSuite number missing in order\u201d (ticket TK-5068)\n- **J-1059** \u00b7 Tar Heel Grocers (Gold) \u00b7 Tom Johnson \u00b7 2h 25m late, SLA breached, status Completed. Why: Vehicle breakdown \u2014 \u201cVan flat tire, waiting on roadside\u201d (ticket TK-5025)\n- **J-1087** \u00b7 Tar Heel Dental (Silver) \u00b7 Ravi Okafor \u00b7 3h 45m late, SLA breached, status In Progress. Why: Address issue \u2014 \u201cSuite number missing in order\u201d (ticket TK-5039)\n- **J-1011** \u00b7 Oak"
+    }
+  ]
+}

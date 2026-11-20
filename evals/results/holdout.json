@@ -1,0 +1,250 @@
+{
+  "summary": {
+    "label": "holdout",
+    "ran_at": "2026-11-19T22:59:30",
+    "mode": "offline (extractive answers, no model calls)",
+    "n": 10,
+    "accuracy": 0.9,
+    "accuracy_by_type": {
+      "sop": 1.0,
+      "idk": 0.5,
+      "jobs": 1.0
+    },
+    "citation_rate": 1.0,
+    "citation_hit_sop": 1.0,
+    "latency_ms_p50": 0.1,
+    "latency_ms_p95": 3.0,
+    "llm_calls": 0,
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "cost_usd": 0.0,
+    "failures": [
+      {
+        "id": "ho-06",
+        "q": "How many sick days do drivers get per year?",
+        "why": "answered instead of I don't know: 'Reassign when the assigned technician cannot reach the job before its SLA deadline (vehicle breakdow'"
+      }
+    ]
+  },
+  "rows": [
+    {
+      "id": "ho-01",
+      "type": "sop",
+      "q": "Is a cancelled job ever counted as late?",
+      "as": "manager",
+      "latency_ms": 91.5,
+      "cost_usd": 0.0,
+      "calls": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "kind": "sop",
+      "citations": [
+        "SOP-LD \u00a72"
+      ],
+      "cited": true,
+      "cite_hit": true,
+      "correct": true,
+      "why": "",
+      "answer": "A job is DELAYED when it is not completed by the end of its 2-hour arrival window. A job is in SLA BREACH when it is not completed by the customer's contract deadline: Gold 2 hours, Silver 4 hours, Bronze 6 hours after the scheduled time. Cancelled jobs are never counted as delayed. [SOP-LD \u00a72]"
+    },
+    {
+      "id": "ho-02",
+      "type": "sop",
+      "q": "How much do we credit a Bronze customer when we breach the SLA?",
+      "as": "manager",
+      "latency_ms": 0.1,
+      "cost_usd": 0.0,
+      "calls": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "kind": "sop",
+      "citations": [
+        "SOP-RF \u00a73",
+        "SOP-RF \u00a72"
+      ],
+      "cited": true,
+      "cite_hit": true,
+      "correct": true,
+      "why": "",
+      "answer": "SLA breach: Gold 25% of the job fee, Silver 15%, Bronze 10%. Cancellation by NorthStar with under 24 hours notice: 20%. Repeat visit due to our error: the repeat visit is free. Full refunds require a manager. [SOP-RF \u00a73] A customer is eligible for a credit when a job is in SLA breach, when a job is cancelled by NorthStar with less than 24 hours notice, or when a repeat visit is needed because of our error. [SOP-RF \u00a72]"
+    },
+    {
+      "id": "ho-03",
+      "type": "sop",
+      "q": "Are technicians allowed to offer refunds to customers?",
+      "as": "manager",
+      "latency_ms": 0.1,
+      "cost_usd": 0.0,
+      "calls": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "kind": "sop",
+      "citations": [
+        "SOP-RF \u00a74",
+        "SOP-RF \u00a75"
+      ],
+      "cited": true,
+      "cite_hit": true,
+      "correct": true,
+      "why": "",
+      "answer": "Dispatchers may offer credits up to 25% of the job fee. Credits above 25% and all full refunds need shift manager approval. Technicians may not promise credits or refunds to customers. [SOP-RF \u00a74] Log a ticket with category Refund request on the job, record the reason and the amount offered, and confirm the credit to the customer in writing following SOP-CU. [SOP-RF \u00a75]"
+    },
+    {
+      "id": "ho-04",
+      "type": "sop",
+      "q": "What happens if outdoor work hits a flooding warning?",
+      "as": "manager",
+      "latency_ms": 0.1,
+      "cost_usd": 0.0,
+      "calls": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "kind": "sop",
+      "citations": [
+        "SOP-SC \u00a74"
+      ],
+      "cited": true,
+      "cite_hit": true,
+      "correct": true,
+      "why": "",
+      "answer": "During lightning, flooding or ice warnings, outdoor work stops. The technician waits in the vehicle and reports a Weather ticket. Dispatch delays the job rather than pressuring the technician to continue. [SOP-SC \u00a74]"
+    },
+    {
+      "id": "ho-05",
+      "type": "sop",
+      "q": "Which channel should we use to send a customer update?",
+      "as": "manager",
+      "latency_ms": 0.1,
+      "cost_usd": 0.0,
+      "calls": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "kind": "sop",
+      "citations": [
+        "SOP-CU \u00a74"
+      ],
+      "cited": true,
+      "cite_hit": true,
+      "correct": true,
+      "why": "",
+      "answer": "Use a short, friendly, professional tone. Send by SMS when a phone number is on file, otherwise by email. Gold customers also receive a phone call from dispatch. [SOP-CU \u00a74]"
+    },
+    {
+      "id": "ho-06",
+      "type": "idk",
+      "q": "How many sick days do drivers get per year?",
+      "as": "manager",
+      "latency_ms": 0.1,
+      "cost_usd": 0.0,
+      "calls": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "kind": "sop",
+      "citations": [
+        "SOP-RA \u00a72"
+      ],
+      "cited": true,
+      "correct": false,
+      "why": "answered instead of I don't know: 'Reassign when the assigned technician cannot reach the job before its SLA deadline (vehicle breakdow'",
+      "answer": "Reassign when the assigned technician cannot reach the job before its SLA deadline (vehicle breakdown, parts missing, sick or off shift), or when a free technician in the same city can arrive at least 30 minutes sooner. [SOP-RA \u00a72]"
+    },
+    {
+      "id": "ho-07",
+      "type": "idk",
+      "q": "What fuel card should I use at the gas station?",
+      "as": "manager",
+      "latency_ms": 0.1,
+      "cost_usd": 0.0,
+      "calls": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "kind": "idk",
+      "citations": [],
+      "cited": false,
+      "correct": true,
+      "why": "",
+      "answer": "I don't know"
+    },
+    {
+      "id": "ho-08",
+      "type": "jobs",
+      "q": "Are there any late jobs in Raleigh right now?",
+      "as": "manager",
+      "latency_ms": 3.0,
+      "cost_usd": 0.0,
+      "calls": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "kind": "jobs",
+      "citations": [
+        "SOP-LD \u00a75"
+      ],
+      "cited": true,
+      "correct": true,
+      "why": "",
+      "gold": [
+        "J-1112",
+        "J-1116",
+        "J-1156"
+      ],
+      "answer": "**3 of 17 jobs in Raleigh are late today** (as of 14:00):\n\n- **J-1116** \u00b7 Pinecrest Pharmacy (Silver) \u00b7 Ian Davis \u00b7 4h 30m late, SLA breached, status En Route. Why: Weather \u2014 \u201cLightning hold at site\u201d (ticket TK-5053)\n- **J-1156** \u00b7 Blue Ridge Auto Parts (Bronze) \u00b7 Diego Wilson \u00b7 2h 15m late, late, SLA not yet breached, status In Progress. Why: Weather \u2014 \u201cLightning hold at site\u201d (ticket TK-5081)\n- **J-1112** \u00b7 Piedmont Clinic (Bronze) \u00b7 Sam Chen \u00b7 1h 30m late, late, SLA not yet breached, status In Progress. Why: Address issue \u2014 \u201cSuite number missing in order\u201d (ticket TK-5049)\n\nMost common reaso"
+    },
+    {
+      "id": "ho-09",
+      "type": "jobs",
+      "q": "List Silver customer jobs that are delayed today",
+      "as": "manager",
+      "latency_ms": 2.9,
+      "cost_usd": 0.0,
+      "calls": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "kind": "jobs",
+      "citations": [
+        "SOP-LD \u00a75"
+      ],
+      "cited": true,
+      "correct": true,
+      "why": "",
+      "gold": [
+        "J-1011",
+        "J-1016",
+        "J-1032",
+        "J-1086",
+        "J-1087",
+        "J-1094",
+        "J-1098",
+        "J-1116"
+      ],
+      "answer": "**8 of 40 jobs for Silver customers are late today** (as of 14:00):\n\n- **J-1116** \u00b7 Pinecrest Pharmacy (Silver) \u00b7 Ian Davis \u00b7 4h 30m late, SLA breached, status En Route. Why: Weather \u2014 \u201cLightning hold at site\u201d (ticket TK-5053)\n- **J-1087** \u00b7 Tar Heel Dental (Silver) \u00b7 Ravi Okafor \u00b7 3h 45m late, SLA breached, status In Progress. Why: Address issue \u2014 \u201cSuite number missing in order\u201d (ticket TK-5039)\n- **J-1098** \u00b7 Ironwood Vet Hospital (Silver) \u00b7 Grace Garcia \u00b7 4h 00m late, SLA breached, status In Progress. Why: Vehicle breakdown \u2014 \u201cEngine warning light, pulled over\u201d (ticket TK-5044)\n- **J-1094**"
+    },
+    {
+      "id": "ho-10",
+      "type": "jobs",
+      "q": "Which jobs breached SLA today?",
+      "as": "manager",
+      "latency_ms": 2.6,
+      "cost_usd": 0.0,
+      "calls": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "kind": "jobs",
+      "citations": [
+        "SOP-LD \u00a75"
+      ],
+      "cited": true,
+      "correct": true,
+      "why": "",
+      "gold": [
+        "J-1059",
+        "J-1087",
+        "J-1094",
+        "J-1098",
+        "J-1116",
+        "J-1140",
+        "J-1155"
+      ],
+      "answer": "**7 of 100 jobs are in SLA breach today** (as of 14:00):\n\n- **J-1155** \u00b7 Queen City Vet Hospital (Gold) \u00b7 Andre Patel \u00b7 2h 35m late, SLA breached, status Completed. Why: Customer not home \u2014 \u201cGate locked, customer unreachable\u201d (ticket TK-5080)\n- **J-1140** \u00b7 Ironwood Clinic (Gold) \u00b7 Fatima Brown \u00b7 15m late, SLA breached, status In Progress. Why: Address issue \u2014 \u201cSuite number missing in order\u201d (ticket TK-5068)\n- **J-1059** \u00b7 Tar Heel Grocers (Gold) \u00b7 Tom Johnson \u00b7 2h 25m late, SLA breached, status Completed. Why: Vehicle breakdown \u2014 \u201cVan flat tire, waiting on roadside\u201d (ticket TK-5025)\n- **J-111"
+    }
+  ]
+}

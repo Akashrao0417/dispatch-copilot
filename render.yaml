@@ -1,0 +1,24 @@
+# Render Blueprint: one click creates the Postgres database and the web app.
+# Render dashboard -> New -> Blueprint -> pick this repo.
+databases:
+  - name: dispatch-db
+    plan: free            # free Postgres expires after 30 days; the app re-seeds itself on a new DB
+    databaseName: dispatch
+    user: dispatch
+
+services:
+  - type: web
+    name: dispatch-copilot
+    runtime: docker
+    plan: free            # sleeps after 15 min idle, ~1 min to wake
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /_stcore/health
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: dispatch-db
+          property: connectionString
+      - key: TZ
+        value: America/New_York
+      - key: ANTHROPIC_API_KEY   # optional; leave blank to run fully offline
+        sync: false

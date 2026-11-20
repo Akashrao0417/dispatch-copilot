@@ -1,0 +1,12 @@
+[
+  {"id": "ho-01", "type": "sop", "q": "Is a cancelled job ever counted as late?", "cite": "SOP-LD §2", "must": ["Cancelled jobs are never counted"]},
+  {"id": "ho-02", "type": "sop", "q": "How much do we credit a Bronze customer when we breach the SLA?", "cite": "SOP-RF §3", "must": ["Bronze 10%"]},
+  {"id": "ho-03", "type": "sop", "q": "Are technicians allowed to offer refunds to customers?", "cite": "SOP-RF §4", "must": ["Technicians may not promise"]},
+  {"id": "ho-04", "type": "sop", "q": "What happens if outdoor work hits a flooding warning?", "cite": "SOP-SC §4", "must": ["outdoor work stops"]},
+  {"id": "ho-05", "type": "sop", "q": "Which channel should we use to send a customer update?", "cite": "SOP-CU §4", "must": ["SMS"]},
+  {"id": "ho-06", "type": "idk", "q": "How many sick days do drivers get per year?"},
+  {"id": "ho-07", "type": "idk", "q": "What fuel card should I use at the gas station?"},
+  {"id": "ho-08", "type": "jobs", "q": "Are there any late jobs in Raleigh right now?", "spec": {"city": "Raleigh"}},
+  {"id": "ho-09", "type": "jobs", "q": "List Silver customer jobs that are delayed today", "spec": {"tier": "Silver"}},
+  {"id": "ho-10", "type": "jobs", "q": "Which jobs breached SLA today?", "spec": {"breach": true}}
+]

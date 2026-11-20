@@ -59,9 +59,20 @@ def _find_day(q: str, today: date) -> date:
     return today
 
 
+# "How often should dispatchers check delayed jobs?" is a procedure question, not a lookup.
+PROCEDURE_WORDS = re.compile(
+    r"\b(how (do|does|should|to|often|quickly|fast|long|soon|many times)|what should|should (i|we|dispatchers?|technicians?)"
+    r"|when (does|do|is|should|must)|count(s)? as|what (are|is) the|deadlines?|policy|procedure|sop|credit|refund|first)\b",
+    re.I)
+# A lookup is about real jobs at a real time/place: today, yesterday, now, my jobs, a city, a date.
+DATA_CUES = re.compile(r"\b(today|yesterday|tomorrow|now|right now|currently|this (morning|afternoon)|my jobs?"
+                       r"|of my|\d{4}-\d{2}-\d{2})\b", re.I)
+
+
 def is_job_question(q: str) -> bool:
-    return bool(LATE_WORDS.search(q) and (JOB_WORDS.search(q) or WHICH_WORDS.search(q))
-                and not re.search(r"\b(how (do|should|to)|what should|policy|procedure|sop|credit|refund)\b", q, re.I))
+    if not LATE_WORDS.search(q) or PROCEDURE_WORDS.search(q):
+        return False
+    return bool(DATA_CUES.search(q) or _find_city(q)) and bool(JOB_WORDS.search(q) or WHICH_WORDS.search(q))
 
 
 def _fmt_late(m: int) -> str:
@@ -72,11 +83,14 @@ def answer_jobs(conn, user: User, question: str, as_of: datetime) -> CopilotAnsw
     day = _find_day(question, as_of.date())
     city = _find_city(question)
     breach_only = bool(re.search(r"\b(breach(ed|es)?|sla)\b", question, re.I))
+    tier = next((t for t in ("Gold", "Silver", "Bronze") if re.search(rf"\b{t}\b", question, re.I)), None)
     rows = queries.jobs_for_day(conn, user, day, as_of, city=city)
+    if tier:
+        rows = [r for r in rows if r["tier"] == tier]
     late = [r for r in rows if (r["is_breach"] if breach_only else r["is_delayed"])]
     late.sort(key=lambda r: (r["tier"] != "Gold", not r["is_breach"], r["priority"] != "High", -r["minutes_late"]))
 
-    where = f" in {city}" if city else ""
+    where = (f" for {tier} customers" if tier else "") + (f" in {city}" if city else "")
     whose = "" if user.is_manager else " assigned to you"
     when = "today" if day == as_of.date() else f"on {day:%b %d}"
     what = "in SLA breach" if breach_only else "late"
@@ -88,7 +102,7 @@ def answer_jobs(conn, user: User, question: str, as_of: datetime) -> CopilotAnsw
     for r in late:
         why = (f"{r['reason']} — “{r['reason_note']}” (ticket {r['reason_ticket']})"
                if r["reason"] else "no reason logged — no service ticket on this job")
-        state = "SLA breached" if r["is_breach"] else "late, SLA not yet breached"
+        state = "SLA breached" if r["is_breach"] else "SLA not yet breached"
         lines.append(f"- **{r['job_id']}** · {r['customer']} ({r['tier']}) · {r['technician']} · "
                      f"{_fmt_late(r['minutes_late'])} late, {state}, status {r['status']}. Why: {why}")
     reasons = {r["reason"] for r in late if r["reason"]}

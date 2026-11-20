@@ -2,6 +2,51 @@
 
 A dispatcher copilot for **NorthStar Logistics** — messy real business data in, clear action out.
 
+**Live demo:** _coming soon_ · **Demo video:** [docs/demo.mp4](docs/demo.mp4) · **Case study:** [docs/case_study.md](docs/case_study.md) · **Evals:** [docs/evals.md](docs/evals.md)
+
+| | |
+|---|---|
+| Eval accuracy (30 questions) | **70% → 100%** after fixing the worst failures · **90%** on 10 held-out questions |
+| "I don't know" when the SOPs don't cover it | 7/7 on the main set |
+| Actions without a human Approve | **0** — every action is proposed, approved, then logged |
+
+## Architecture
+
+```mermaid
+flowchart LR
+    subgraph Sources["Messy sources"]
+        CSV["jobs.csv<br/>6 date formats, dirty phones"]
+        XLSX["service_logs.xlsx<br/>duplicate tickets + roster"]
+        CRM["CRM API<br/>paginated JSON"]
+    end
+    ETL["ETL<br/>clean · dedupe · validate<br/>+ data-quality report"]
+    PG[("Postgres<br/>customers · technicians<br/>jobs · tickets")]
+    SOP["5 SOP PDFs"]
+    RAG["RAG<br/>BM25 retrieval<br/>cite or say I don't know"]
+    CP["Copilot<br/>job answers from SQL<br/>+ SOP citations"]
+    AG["Action agent<br/>3 tools only"]
+    UI["Streamlit<br/>Dashboard · Ask · Actions · Audit"]
+    AUTH{{"Roles<br/>Manager / Technician"}}
+    AUD[("audit_log<br/>who · what · when")]
+    LLM(["Claude<br/>(optional)"])
+
+    CSV --> ETL
+    XLSX --> ETL
+    CRM --> ETL
+    ETL --> PG
+    SOP --> RAG --> CP
+    PG --> CP --> UI
+    UI -->|Suggest| AG
+    AG -->|proposal| UI
+    UI -->|human clicks Approve| AG
+    AG -->|execute| PG
+    AG --> AUD
+    AUTH -.->|scopes every query and action| CP
+    AUTH -.-> AG
+    LLM -.->|writes SOP answers| RAG
+    LLM -.->|plans tool calls| AG
+```
+
 ## The company
 
 NorthStar Logistics is a regional delivery and field-service company in North Carolina
@@ -20,7 +65,7 @@ Every morning dispatchers are lost. The data lives in three systems that don't t
 
 | Source | What's in it | What's wrong with it |
 |---|---|---|
-| `data/raw/jobs.csv` | the job board, exported from the dispatch tool | 6 different date formats, a `TBD` date, phones missing or typed 7 different ways, cities as `CLT` / `charlotte ` / `Charlotte, NC`, tech IDs as `T014` / `t-14`, duplicate rows, a job for a customer that doesn't exist |
+| `data/raw/jobs.csv` | the job board, exported from the dispatch tool | 6 different date formats, a `TBD` date, phones missing or written 6 different ways, cities as `CLT` / `charlotte ` / `Charlotte, NC`, tech IDs as `T014` / `t-14`, duplicate rows, a job for a customer that doesn't exist |
 | `data/raw/service_logs.xlsx` | ops keeps service tickets and the technician roster in Excel | duplicate tickets (exact copies and re-typed ones in CAPS), duplicate roster rows |
 | CRM API (`backend/crm_api.py`) | customer profiles and contract tier | paginated, nested JSON, some customers have no phone |
 
@@ -61,15 +106,6 @@ So jobs slip, nobody knows which ones are late or why, and customers keep callin
 9. **Audit log** — every proposal, approval, rejection, execution and refused attempt is written to
    `audit_log` with **who, what, when**. The app tables are never dropped by the ETL.
 
-```
-data/raw/jobs.csv ─────────┐
-data/raw/service_logs.xlsx ├─► backend/etl.py ─► Postgres ◄──────────────┐
-CRM API (FastAPI, :8001) ──┘                       │                     │ approve → execute
-                                                   ▼                     │
-docs/sops/*.pdf ─► backend/rag.py ─► backend/copilot.py ─► Streamlit ─► backend/agent.py ─► audit_log
-                                       (answers + proof)    (role-scoped)  (3 tools only)
-```
-
 ### Definitions
 
 - **Delayed** — not cancelled, and not finished by the end of its 2-hour arrival window.
@@ -90,7 +126,8 @@ python docs/sops/build_sops.py                # (re)builds the 5 SOP PDFs from d
 uvicorn backend.crm_api:app --port 8001 &     # fake CRM API
 python -m backend.etl                         # clean + load + report + users/audit tables
 streamlit run frontend/app.py                 # http://localhost:8501
-pytest                                        # 52 tests (DB tests use a throwaway dispatch_test DB)
+pytest                                        # 53 tests (DB tests use throwaway databases)
+python -m evals.run_evals --label run         # 30-question eval: accuracy, citations, latency, cost
 ```
 
 Optional: `export ANTHROPIC_API_KEY=...` to let Claude write SOP answers and plan actions
@@ -99,6 +136,20 @@ Optional: `export ANTHROPIC_API_KEY=...` to let Claude write SOP answers and pla
 **Demo:** sign in as *Manager* in the sidebar → **Ask Copilot** → "Which jobs are late in Charlotte
 today, and why?" → **Actions** → *Suggest actions* → approve "Reassign J-1005 to T-001 (Priya Sharma)"
 → **Audit Log**. Then sign in as a technician and see only their jobs.
+
+**With Docker:** `docker compose --profile app up --build` → http://localhost:8501 (Postgres + app; demo data
+is seeded automatically on first start).
+
+## Deploy (Render)
+
+1. Push this repo to GitHub.
+2. Render dashboard → **New → Blueprint** → pick the repo. `render.yaml` creates a free Postgres and the
+   Docker web service, and wires `DATABASE_URL`.
+3. On start, `backend/bootstrap.py` seeds a fresh demo day if the data is from an earlier day.
+
+Free tier notes: the web service sleeps after 15 min idle (about a minute to wake) and free Postgres
+expires after 30 days; a new database is re-seeded automatically. Demo sign-in has no passwords —
+only fictional data should ever be loaded into a public deploy.
 
 Config via env vars (see `.env.example`): `DATABASE_URL`, `CRM_API_URL`, `ANTHROPIC_API_KEY`, `CLAUDE_MODEL`.
 
@@ -109,5 +160,7 @@ data/        generator + raw messy sources
 backend/     CRM API · ETL · schema · auth (roles) · queries · rag · copilot · agent · llm
 frontend/    Streamlit: app.py (navigation) + views/ (dashboard, ask, actions, audit)
 docs/        data quality report · data dictionary · sops/ (5 PDFs + source)
-tests/       test_etl.py (phase 1) · test_copilot.py (RAG, roles, agent, audit)
+tests/       test_etl.py · test_copilot.py (RAG, roles, agent, audit) · test_evals.py (regression guard)
+evals/       30 questions + 10 held-out, runner, results
+Dockerfile · docker-compose.yml · render.yaml
 ```

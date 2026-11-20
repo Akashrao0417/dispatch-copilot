@@ -33,7 +33,7 @@ TOKEN = re.compile(r"[a-z0-9]+")
 STOP = set("""a an and are as at be been but by can do does for from has have how i if in into is it its
 me my of on or our should so than that the their them then there these they this to up us was we were
 what when where which who why will with you your about after before any all also get got just need
-please tell know does did am being""".split())
+please tell know does did am being""".split()) | {"s", "t", "d", "m", "ll", "re", "ve"}  # contraction bits
 # A few business synonyms people actually type -> the words the SOPs use.
 SYNONYMS = {
     "late": ["delayed", "late"], "delay": ["delayed"], "delays": ["delayed"],
@@ -52,6 +52,12 @@ SYNONYMS = {
 
 
 def _stem(w: str) -> str:
+    w = _strip_suffix(w)
+    # "choose"/"choosing", "update"/"updated" -> same stem
+    return w[:-1] if len(w) > 4 and w.endswith("e") else w
+
+
+def _strip_suffix(w: str) -> str:
     if len(w) <= 3:
         return w
     if w.endswith(("ied", "ies")) and len(w) > 4:
@@ -161,18 +167,22 @@ class BM25:
         self.tf = [Counter(d) for d in self.docs]
 
     def search(self, query: str, k: int = 4) -> list[tuple[Chunk, float, int]]:
-        q = set(tokenize(query, expand=True))
+        """Returns (chunk, bm25 score, how many of the user's own words the chunk supports)."""
+        # One group per word the user typed: the word plus its synonyms.
+        groups = [{_stem(x) for x in SYNONYMS.get(w, [w])}
+                  for w in dict.fromkeys(TOKEN.findall(query.lower())) if w not in STOP]
+        q = set().union(*groups) if groups else set()
         if DEFINITION_Q.search(query):
             q.add(_stem("definitions"))
         results = []
         for i, tf in enumerate(self.tf):
-            score, hits = 0.0, 0
+            score = 0.0
             dl = len(self.docs[i])
             for t in q:
                 if t in tf:
-                    hits += 1
                     f = tf[t]
                     score += self.idf[t] * f * (self.k1 + 1) / (f + self.k1 * (1 - self.b + self.b * dl / self.avgdl))
+            hits = sum(1 for g in groups if g & tf.keys())
             if score > 0:
                 results.append((self.chunks[i], score, hits))
         results.sort(key=lambda r: -r[1])
@@ -207,7 +217,8 @@ CITE_RE = re.compile(r"\[(SOP-[A-Z]{2}) §(\d+)\]")
 def ask_sop(question: str, k: int = 4, client=None) -> Answer:
     hits = index().search(question, k=k)
     retrieved = [(c.cite, round(s, 2)) for c, s, _ in hits]
-    if not hits or hits[0][1] < MIN_SCORE or hits[0][2] < min(MIN_TERM_HITS, len(set(tokenize(question)))):
+    n_words = len({w for w in TOKEN.findall(question.lower()) if w not in STOP})
+    if not hits or hits[0][1] < MIN_SCORE or hits[0][2] < min(MIN_TERM_HITS, n_words):
         return Answer(IDK, [], "refused", retrieved)
 
     client = client if client is not None else llm.client()

@@ -29,3 +29,20 @@ ticket_id (`TK-5001`…), job_id (FK), technician_id, logged_at, category (Traff
 
 ## etl_runs
 One row per ETL run with the full data-quality stats as JSONB (shown in the dashboard).
+
+## App tables (backend/app_schema.sql — never dropped by the ETL)
+
+### users
+username (`manager`, `t-001`…), name, role (`manager` | `technician`), technician_id (technicians only).
+
+### proposed_actions
+action_id, tool (`reassign_technician` | `create_ticket` | `draft_customer_update`), job_id, args (JSON),
+rationale, citations (SOP sections), status (`pending` → `executed` | `rejected` | `failed`),
+proposed_by (`copilot` or a username), proposed_at, decided_by, decided_at, result (JSON).
+
+### audit_log
+log_id, ts (**when**), actor + role (**who**), event (`proposed` / `approved` / `rejected` / `executed` /
+`failed` / `denied`), tool, job_id, action_id, details (**what**, JSON). Append-only.
+
+### customer_messages
+Approved customer updates, `ready_to_send`: job_id, customer_id, channel (sms/email), body, approved_by, created_at.

@@ -1,0 +1,79 @@
+[
+  {
+    "id": "SOP-LD",
+    "file": "SOP-LD_late_delivery.pdf",
+    "title": "Late Delivery",
+    "owner": "Dispatch Operations",
+    "effective": "2026-09-01",
+    "sections": [
+      ["1", "Purpose", "Defines how dispatchers detect, triage and resolve jobs that miss their promised arrival window, so customers hear from us before they have to call."],
+      ["2", "Definitions", "A job is DELAYED when it is not completed by the end of its 2-hour arrival window. A job is in SLA BREACH when it is not completed by the customer's contract deadline: Gold 2 hours, Silver 4 hours, Bronze 6 hours after the scheduled time. Cancelled jobs are never counted as delayed."],
+      ["3", "Detection", "Dispatchers review the delayed-jobs list on the dashboard at least every 30 minutes during operating hours (7:00-19:00). Any job within 30 minutes of its SLA deadline is treated as at risk and handled before other delayed jobs."],
+      ["4", "Triage order", "Handle delayed jobs in this order: (1) Gold customers, (2) jobs already in SLA breach, (3) High priority jobs, (4) all others by minutes late. Check the latest service ticket for the reason before acting."],
+      ["5", "Actions by reason", "Traffic or weather: keep the technician, send a customer update with a new ETA. Vehicle breakdown or parts missing: reassign per SOP-RA if a qualified technician can arrive sooner. Customer not home or address issue: create a ticket, contact the customer, and hold the job for up to 60 minutes before rescheduling."],
+      ["6", "Customer contact", "Every delayed job must receive a customer update within 15 minutes of becoming delayed, following SOP-CU. Never leave a delayed Gold customer without contact for more than 30 minutes."],
+      ["7", "Escalation", "Escalate to the shift manager when a Gold job is in SLA breach, when 3 or more jobs in one city are delayed at the same time, or when a job is more than 4 hours late."]
+    ]
+  },
+  {
+    "id": "SOP-RF",
+    "file": "SOP-RF_refund.pdf",
+    "title": "Refunds and Service Credits",
+    "owner": "Customer Success",
+    "effective": "2026-09-01",
+    "sections": [
+      ["1", "Purpose", "Sets when customers receive a service credit or refund for late or failed jobs, and who may approve it."],
+      ["2", "Eligibility", "A customer is eligible for a credit when a job is in SLA breach, when a job is cancelled by NorthStar with less than 24 hours notice, or when a repeat visit is needed because of our error."],
+      ["3", "Credit amounts", "SLA breach: Gold 25% of the job fee, Silver 15%, Bronze 10%. Cancellation by NorthStar with under 24 hours notice: 20%. Repeat visit due to our error: the repeat visit is free. Full refunds require a manager."],
+      ["4", "Approval limits", "Dispatchers may offer credits up to 25% of the job fee. Credits above 25% and all full refunds need shift manager approval. Technicians may not promise credits or refunds to customers."],
+      ["5", "Process", "Log a ticket with category Refund request on the job, record the reason and the amount offered, and confirm the credit to the customer in writing following SOP-CU."],
+      ["6", "Timing", "Credits are applied to the customer's next invoice. Refunds to card are processed by Finance within 5 business days."]
+    ]
+  },
+  {
+    "id": "SOP-RA",
+    "file": "SOP-RA_reassignment.pdf",
+    "title": "Job Reassignment",
+    "owner": "Dispatch Operations",
+    "effective": "2026-09-01",
+    "sections": [
+      ["1", "Purpose", "Explains when and how a job may be moved from one technician to another."],
+      ["2", "When to reassign", "Reassign when the assigned technician cannot reach the job before its SLA deadline (vehicle breakdown, parts missing, sick or off shift), or when a free technician in the same city can arrive at least 30 minutes sooner."],
+      ["3", "Choosing the new technician", "Pick a technician whose home city matches the job's city and who has no open jobs (no job that is Scheduled, En Route or In Progress) for the day. Prefer the matching skill: Installer for installs, Repair Tech for repairs, any role for deliveries and pickups."],
+      ["4", "Who may reassign", "Only dispatchers and managers may reassign jobs. Technicians may request a reassignment by creating a ticket on their job but may not move jobs themselves."],
+      ["5", "Approval", "Every reassignment proposed by the copilot must be approved by a person before it runs. The approval, the person who approved it and the time are logged."],
+      ["6", "After reassigning", "Notify both technicians, keep the original job ID, and send the customer an update with the new technician's first name and ETA following SOP-CU."],
+      ["7", "Limits", "Do not reassign a job more than twice. A third change requires the shift manager."]
+    ]
+  },
+  {
+    "id": "SOP-SC",
+    "file": "SOP-SC_safety_check.pdf",
+    "title": "Vehicle and Site Safety Check",
+    "owner": "Safety and Compliance",
+    "effective": "2026-09-01",
+    "sections": [
+      ["1", "Purpose", "Keeps technicians, customers and the public safe on the road and on site."],
+      ["2", "Pre-trip check", "Before the first job each day the technician checks tires, lights, brakes, mirrors and the load strap, and records the check in the driver app. A failed check means the vehicle may not leave the depot."],
+      ["3", "On-site check", "On arrival the technician confirms safe parking, a clear walkway, and no visible hazards such as exposed wiring or standing water. If the site is unsafe the technician must not start work and must create a ticket."],
+      ["4", "Severe weather", "During lightning, flooding or ice warnings, outdoor work stops. The technician waits in the vehicle and reports a Weather ticket. Dispatch delays the job rather than pressuring the technician to continue."],
+      ["5", "Vehicle breakdown", "Pull over safely, turn on hazard lights, call roadside assistance, then create a Vehicle breakdown ticket. Never attempt roadside repairs on a highway shoulder."],
+      ["6", "Incidents", "Any injury, collision or property damage is reported to the shift manager by phone immediately and logged within 1 hour."]
+    ]
+  },
+  {
+    "id": "SOP-CU",
+    "file": "SOP-CU_customer_update.pdf",
+    "title": "Customer Updates",
+    "owner": "Customer Success",
+    "effective": "2026-09-01",
+    "sections": [
+      ["1", "Purpose", "Makes sure customers get clear, honest updates so they do not have to call us."],
+      ["2", "When to send", "Send an update when a job becomes delayed, when it is reassigned, when the ETA changes by more than 30 minutes, and when the job is completed late."],
+      ["3", "What to include", "Every update includes the job ID, an apology if we are late, the reason in plain words, the new ETA as a time window, and the first name of the technician. Do not share the technician's phone number or blame the technician."],
+      ["4", "Tone and channel", "Use a short, friendly, professional tone. Send by SMS when a phone number is on file, otherwise by email. Gold customers also receive a phone call from dispatch."],
+      ["5", "Template", "Hi {customer}, this is NorthStar Logistics about job {job_id}. We are sorry, your technician is running late because of {reason}. Your new arrival window is {eta}. {technician} will be with you. Reply to this message if that time does not work."],
+      ["6", "Review", "Messages drafted by the copilot are drafts. A dispatcher must approve every message before it is sent, and the approval is logged."]
+    ]
+  }
+]

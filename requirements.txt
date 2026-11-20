@@ -8,3 +8,6 @@ sqlalchemy>=2.0
 streamlit>=1.35
 altair>=5
 pytest>=8
+reportlab>=4
+pypdf>=4
+anthropic>=0.40

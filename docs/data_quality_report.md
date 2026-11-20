@@ -1,6 +1,6 @@
 # Data quality report
 
-_Generated 2026-11-19 21:59 by `python -m backend.etl`._
+_Generated 2026-11-19 22:48 by `python -m backend.etl`._
 
 ## Summary
 
